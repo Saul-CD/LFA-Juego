@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+        <title>Intérprete General de Autómatas</title>
+        <script src="juego/auxiliares.js"></script>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #111111;
+                color: #ecf0f1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                height: 100vh;
+                margin: 0;
+                overflow: hidden;
+            }
+
+            h1 {
+                color: antiquewhite;
+                text-align: center;
+            }
+
+            #contenedor {
+                border: 5px solid #363636;
+                padding: 10px;
+                background-color: #363636;
+                border-radius: 10px;
+                user-select: none;
+            }
+
+            #estatus {
+                margin-top: 20px;
+                font-size: 1.2em;
+                height: 30px;
+                color: #f1c40f;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h1>Intérprete de Autómata</h1>
+        <div id="contenedor">
+            <div id="juego"></div>
+        </div>
+        <div id="estatus">Cargando...</div>
+
+        <script src="interprete.js"></script>
+    </body>
+</html>
