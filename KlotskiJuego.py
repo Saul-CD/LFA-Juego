@@ -19,6 +19,7 @@ class Klotski(JuegoInterfaz):
         self,
         q: tuple[str, str, str, str, str],
     ) -> str:
+        # Reemplaza piezas del mismo tipo por la misma letra para reducir el tamaño final del automata
         ret = ""
         for row in q:
             for char in row:
@@ -132,7 +133,7 @@ class Klotski(JuegoInterfaz):
 
         assert cursor == 3
 
-        # 10. Convertir la matriz 2D de vuelta a una cadena y retornarla
+        # Convertir la matriz 2D de vuelta a una cadena
         return tuple("".join(row) for row in q_nuevo)
 
     def es_final(self, q: tuple[str, str, str, str, str]) -> bool:

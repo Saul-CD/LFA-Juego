@@ -23,11 +23,12 @@ window.juegoAuxiliares = {
     dibujarEstado: function (q, contenedor) {
         const estadoLimpio = q.replace(/\n/g, "");
 
-        contenedor.style["display"] = "grid";
-        contenedor.style["grid-template-columns"] = "repeat(4, 60px)";
-        contenedor.style["grid-template-rows"] = "repeat(5, 60px)";
-        contenedor.style["gap"] = "5px";
-        contenedor.style["position"] = "relative";
+        const tableroDiv = document.createElement("div");
+        tableroDiv.style["display"] = "grid";
+        tableroDiv.style["grid-template-columns"] = `repeat(${this.ANCHO_TABLERO}, ${this.TAM_CELDA}px)`;
+        tableroDiv.style["grid-template-rows"] = `repeat(${this.ALTO_TABLERO}, ${this.TAM_CELDA}px)`;
+        tableroDiv.style["gap"] = "5px";
+        tableroDiv.style["position"] = "relative";
 
         const tablero = [];
         for (let i = 0; i < this.ALTO_TABLERO; i++) {
@@ -77,7 +78,7 @@ window.juegoAuxiliares = {
                 if (piezaChar in this.COLORES) pieceElement.style["background-color"] = this.COLORES[piezaChar];
                 else pieceElement.style["border"] = "3px dotted white";
 
-                contenedor.appendChild(pieceElement);
+                tableroDiv.appendChild(pieceElement);
 
                 for (let h = 0; h < height; h++) {
                     for (let w = 0; w < width; w++) {
@@ -87,19 +88,23 @@ window.juegoAuxiliares = {
             }
         }
 
-        const estatusElement = document.getElementById("cargando");
-        if (estatusElement) {
-            estatusElement.textContent = "Usa WASD y Flechas para mover los cursores.";
-        }
+        contenedor.appendChild(tableroDiv);
+
+        const controles = document.createElement("div");
+        controles.style["margin-top"] = "10px";
+        controles.style["width"] = `${this.ANCHO_TABLERO * this.TAM_CELDA}px`;
+        controles.style["color"] = "white";
+        controles.style["text-align"] = "center";
+        controles.textContent = "Usa WASD y las flechas para mover los cursores";
+        contenedor.appendChild(controles);
     },
 
     /**
      * Configura los manejadores de entrada (teclado, mouse y touch)
-     * @param {string} q - El string del estado actual.
      * @param {HTMLElement} contenedor - El elemento HTML donde se dibuja el tablero.
      * @param {function} aplicarEntrada - La funcion del interprete a la que se debe llamar con la accion del usuario.
      */
-    capturarEntrada: function (q, contenedor, aplicarEntrada) {
+    capturarEntrada: function (contenedor, aplicarEntrada) {
         const keydown = (event) => {
             const equivalencias = {
                 // cursor 1
