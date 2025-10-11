@@ -30,12 +30,11 @@ async function main() {
     try {
         let response = await fetch("juego/automata.json.gz");
         if (!response.ok) throw new Error("No se encontró juego/automata.json.gz");
-        // const automata_json = await response.json();
-        const compressedData = await response.arrayBuffer();
+        
+        // Descomprimir  el gzip
+        const data = pako.inflate(new Uint8Array(await response.arrayBuffer()), { to: "string" });
 
-        const decompressedData = pako.inflate(new Uint8Array(compressedData), { to: "string" });
-
-        const automata_json = JSON.parse(decompressedData);
+        const automata_json = JSON.parse(data);
 
         const automata = new Automata(automata_json);
         estatusElement.textContent = "";

@@ -42,8 +42,8 @@ window.juegoAuxiliares = {
 
                 poder: {
                     position: "relative",
-                    top: "30%",
-                    left: "30%",
+                    top: "35%",
+                    left: "35%",
                     width: "8px",
                     height: "8px",
                     "background-color": "#f1c40f",
@@ -61,37 +61,34 @@ window.juegoAuxiliares = {
                 },
 
                 fantasma: {
-                    "border-radius": "8px 8px 0 0",
+                    "border-radius": "100px 100px 0 0",
                     "background-color": "#e74c3c",
                 },
 
                 "fantasma-huyendo": {
-                    "border-radius": "8px 8px 0 0",
+                    "border-radius": "100px 100px 0 0",
                     "background-color": "#9b59b6",
                 },
             };
             celda.style.cssText = "";
-            for (const k in estilos["celda"]) {
-                const v = estilos[estilo][k];
-                celda.style[k] = v;
-            }
             for (const k in estilos[estilo]) {
                 const v = estilos[estilo][k];
                 celda.style[k] = v;
             }
         };
 
-        contenedor.innerHTML = ""; // Limpiar el tablero anterior
-        contenedor.style.display = "grid";
-        contenedor.style.gridTemplateColumns = `repeat(${MAPA[0].length}, 20px)`;
-        contenedor.style.gridTemplateRows = `repeat(${MAPA.length}, 20px)`;
+        const tableroDiv = document.createElement("div");
+
+        tableroDiv.style.display = "grid";
+        tableroDiv.style.gridTemplateColumns = `repeat(${this.MAPA[0].length}, 30px)`;
+        tableroDiv.style.gridTemplateRows = `repeat(${this.MAPA.length}, 30px)`;
 
         // Dibujar cada celda
-        for (let y = 0; y < MAPA.length; y++) {
-            for (let x = 0; x < MAPA[y].length; x++) {
+        for (let y = 0; y < this.MAPA.length; y++) {
+            for (let x = 0; x < this.MAPA[y].length; x++) {
                 const celda = document.createElement("div");
 
-                if (MAPA[y][x] === "#") {
+                if (this.MAPA[y][x] === "#") {
                     darEstilo(celda, "muro");
                 } else {
                     if (puntos.some(([px, py]) => px === x && py === y)) darEstilo(celda, "punto");
@@ -103,9 +100,19 @@ window.juegoAuxiliares = {
                         if (fx === x && fy === y) darEstilo(celda, tienePoder ? "fantasma-huyendo" : "fantasma");
                     });
                 }
-                contenedor.appendChild(celda);
+                tableroDiv.appendChild(celda);
             }
         }
+
+        contenedor.appendChild(tableroDiv);
+
+        const controles = document.createElement("div");
+        controles.style["margin-top"] = "10px";
+        controles.style["color"] = "white";
+        controles.style["text-align"] = "center";
+        controles.style["white-space"] =  "pre-line";
+        controles.textContent = "Usa las flechas para moverte\r\nGanas al conseguir todos los puntos blancos";
+        contenedor.appendChild(controles);
     },
 
     /**
