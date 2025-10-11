@@ -10,6 +10,10 @@ window.juegoAuxiliares = {
         "####       ####",
         "###############",
     ],
+    touchX: -1,
+    touchY: -1,
+    minDistanciaSwipe: 30,
+
     /**
      * Dibuja un estado especifico en el contenedor proporcionado.
      * @param {string} q - El string del estado actual.
@@ -46,28 +50,28 @@ window.juegoAuxiliares = {
                     left: "35%",
                     width: "8px",
                     height: "8px",
-                    "background-color": "#f1c40f",
+                    "background-color": "#df8c18ff",
                     "border-radius": "50%",
                 },
 
                 pacman: {
-                    "background-color": "#f1c40f",
+                    "background-color": "yellow",
                     "border-radius": "50%",
                 },
                 "pacman-poder": {
-                    "background-color": "#e67e22",
+                    "background-color": "#ff7700ff",
                     "border-radius": "50%",
-                    "box-shadow": "0 0 10px #e67e22",
+                    "box-shadow": "0 0 10px #ff7700ff",
                 },
 
                 fantasma: {
                     "border-radius": "100px 100px 0 0",
-                    "background-color": "#e74c3c",
+                    "background-color": "red",
                 },
 
                 "fantasma-huyendo": {
                     "border-radius": "100px 100px 0 0",
-                    "background-color": "#9b59b6",
+                    "background-color": "blue",
                 },
             };
             celda.style.cssText = "";
@@ -110,8 +114,9 @@ window.juegoAuxiliares = {
         controles.style["margin-top"] = "10px";
         controles.style["color"] = "white";
         controles.style["text-align"] = "center";
-        controles.style["white-space"] =  "pre-line";
-        controles.textContent = "Usa las flechas para moverte\r\nGanas al conseguir todos los puntos blancos";
+        controles.style["white-space"] = "pre-line";
+        controles.textContent =
+            "Usa las flechas o arrastra la pantalla para moverte\r\nGanas al conseguir todos los puntos blancos";
         contenedor.appendChild(controles);
     },
 
@@ -145,5 +150,44 @@ window.juegoAuxiliares = {
 
         window.addEventListener("keydown", keydown);
         window.currentGameKeyListener = keydown;
+
+        // Controles moviles
+        const touchstart = (event) => {
+            const touch = event.touches[0];
+            this.touchX = touch.clientX;
+            this.touchY = touch.clientY;
+            console.log(this.touchX);
+            console.log(this.touchY);
+        };
+
+        const touchmove = (event) => event.preventDefault();
+
+        const touchend = (event) => {
+            const touch = event.changedTouches[0];
+            const dx = touch.clientX - this.touchX;
+            const dy = touch.clientY - this.touchY;
+
+            console.log(dx);
+            console.log(dy);
+
+            let direccion = null;
+            if (Math.abs(dx) > this.minDistanciaSwipe || Math.abs(dy) > this.minDistanciaSwipe) {
+                if (Math.abs(dx) > Math.abs(dy)) {
+                    direccion = dx > 0 ? "d" : "a";
+                } else {
+                    direccion = dy > 0 ? "s" : "w";
+                }
+            }
+
+            console.log(direccion);
+
+            if (direccion) {
+                leerEntradaUsuario(direccion);
+            }
+        };
+
+        contenedor.addEventListener("touchstart", touchstart, { passive: false });
+        contenedor.addEventListener("touchmove", touchmove, { passive: false });
+        contenedor.addEventListener("touchend", touchend, { passive: false });
     },
 };
