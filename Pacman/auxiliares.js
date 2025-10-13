@@ -29,56 +29,44 @@ window.juegoAuxiliares = {
 
         const darEstilo = (celda, estilo) => {
             const estilos = {
-                muro: {
-                    "background-color": "#2980b9",
-                    "border-radius": "2px",
-                },
+                muro: `background-color: #2980b9;
+                    border-radius: 2px`,
+                punto: `position: relative;
+                    top: 45%;
+                    left: 45%;
+                    width: 4px;
+                    height: 4px;
+                    background-color: white;
+                    border-radius: 50%
+                `,
 
-                punto: {
-                    position: "relative",
-                    top: "45%",
-                    left: "45%",
-                    width: "4px",
-                    height: "4px",
-                    "background-color": "white",
-                    "border-radius": "50%",
-                },
+                poder: `position: relative;
+                    top: 35%;
+                    left: 35%;
+                    width: 8px;
+                    height: 8px;
+                    background-color: #df8c18ff;
+                    border-radius: 50%
+                `,
 
-                poder: {
-                    position: "relative",
-                    top: "35%",
-                    left: "35%",
-                    width: "8px",
-                    height: "8px",
-                    "background-color": "#df8c18ff",
-                    "border-radius": "50%",
-                },
+                pacman: `background-color: yellow;
+                    border-radius: 50%
+                `,
+                "pacman-poder": `background-color: #ff7700ff;
+                    border-radius: 50%;
+                    box-shadow: 0 0 10px #ff7700ff
+                `,
 
-                pacman: {
-                    "background-color": "yellow",
-                    "border-radius": "50%",
-                },
-                "pacman-poder": {
-                    "background-color": "#ff7700ff",
-                    "border-radius": "50%",
-                    "box-shadow": "0 0 10px #ff7700ff",
-                },
+                fantasma: `border-radius: 100px 100px 0 0;
+                    background-color: red
+                `,
 
-                fantasma: {
-                    "border-radius": "100px 100px 0 0",
-                    "background-color": "red",
-                },
-
-                "fantasma-huyendo": {
-                    "border-radius": "100px 100px 0 0",
-                    "background-color": "blue",
-                },
+                "fantasma-huyendo": `border-radius: 100px 100px 0 0;
+                    background-color: blue
+                `,
             };
-            celda.style.cssText = "";
-            for (const k in estilos[estilo]) {
-                const v = estilos[estilo][k];
-                celda.style[k] = v;
-            }
+
+            celda.style.cssText = estilos[estilo];
         };
 
         const tableroDiv = document.createElement("div");
@@ -86,6 +74,11 @@ window.juegoAuxiliares = {
         tableroDiv.style.display = "grid";
         tableroDiv.style.gridTemplateColumns = `repeat(${this.MAPA[0].length}, 30px)`;
         tableroDiv.style.gridTemplateRows = `repeat(${this.MAPA.length}, 30px)`;
+
+        let texto =
+            "Usa las flechas o arrastra la pantalla para moverte\r\nGanas al conseguir todos los puntos blancos";
+
+        if (puntos.length == 0) texto = "Ganaste!";
 
         // Dibujar cada celda
         for (let y = 0; y < this.MAPA.length; y++) {
@@ -102,6 +95,7 @@ window.juegoAuxiliares = {
 
                     fantasmas.forEach(([fx, fy], index) => {
                         if (fx === x && fy === y) darEstilo(celda, tienePoder ? "fantasma-huyendo" : "fantasma");
+                        if (fx === px && fy === py) texto = "Perdiste\r\nMueve a pacman para volver a empezar";
                     });
                 }
                 tableroDiv.appendChild(celda);
@@ -115,8 +109,7 @@ window.juegoAuxiliares = {
         controles.style["color"] = "white";
         controles.style["text-align"] = "center";
         controles.style["white-space"] = "pre-line";
-        controles.textContent =
-            "Usa las flechas o arrastra la pantalla para moverte\r\nGanas al conseguir todos los puntos blancos";
+        controles.textContent = texto;
         contenedor.appendChild(controles);
     },
 
@@ -156,8 +149,6 @@ window.juegoAuxiliares = {
             const touch = event.touches[0];
             this.touchX = touch.clientX;
             this.touchY = touch.clientY;
-            console.log(this.touchX);
-            console.log(this.touchY);
         };
 
         const touchmove = (event) => event.preventDefault();
@@ -167,9 +158,6 @@ window.juegoAuxiliares = {
             const dx = touch.clientX - this.touchX;
             const dy = touch.clientY - this.touchY;
 
-            console.log(dx);
-            console.log(dy);
-
             let direccion = null;
             if (Math.abs(dx) > this.minDistanciaSwipe || Math.abs(dy) > this.minDistanciaSwipe) {
                 if (Math.abs(dx) > Math.abs(dy)) {
@@ -178,8 +166,6 @@ window.juegoAuxiliares = {
                     direccion = dy > 0 ? "s" : "w";
                 }
             }
-
-            console.log(direccion);
 
             if (direccion) {
                 leerEntradaUsuario(direccion);
