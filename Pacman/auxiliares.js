@@ -40,7 +40,7 @@ window.juegoAuxiliares = {
         } else if (haPerdido) {
             // --- LÓGICA DE DERROTA ---
             gif = "https://media.tenor.com/KxHvjKDoTkEAAAAM/brain-taking-out.gif";
-            texto = "Perdiste...";
+            texto = "Perdiste...\r\nMueve para volver a empezar";
         }
 
         if (gif) {
@@ -90,7 +90,7 @@ window.juegoAuxiliares = {
                     else if (poderes.some(([px, py]) => px === x && py === y)) darEstilo(celda, "poder");
 
                     if (px === x && py === y) darEstilo(celda, tienePoder ? "pacman-poder" : "pacman");
-                    
+
                     fantasmas.forEach(([fx, fy]) => {
                         if (fx === x && fy === y) darEstilo(celda, tienePoder ? "fantasma-huyendo" : "fantasma");
                     });
@@ -119,9 +119,18 @@ window.juegoAuxiliares = {
         // (Esta función está correcta, no necesita cambios)
         const keydown = (event) => {
             const equivalencias = {
-                w: "w", a: "a", s: "s", d: "d",
-                W: "w", A: "a", S: "s", D: "d",
-                ArrowUp: "w", ArrowLeft: "a", ArrowDown: "s", ArrowRight: "d",
+                w: "w",
+                a: "a",
+                s: "s",
+                d: "d",
+                W: "w",
+                A: "a",
+                S: "s",
+                D: "d",
+                ArrowUp: "w",
+                ArrowLeft: "a",
+                ArrowDown: "s",
+                ArrowRight: "d",
             };
             const movimiento = equivalencias[event.key];
             if (movimiento) {
