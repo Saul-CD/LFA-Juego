@@ -1,8 +1,8 @@
 window.juegoAuxiliares = {
     MAPA: [
         "###############",
-        "#   #       ## #",
-        "# # #  ##    #",
+        "#   #      ## #",
+        "# # #   ##    #",
         "# ####   #### #",
         "#           # #",
         "### ## # ## ###",
@@ -31,30 +31,36 @@ window.juegoAuxiliares = {
         const haGanado = puntos.length === 0;
         // La condición de derrota es si un fantasma está en la misma casilla que Pac-Man Y Pac-Man NO tiene poder.
         const haPerdido = fantasmas.some(([fx, fy]) => fx === px && fy === py && !tienePoder);
-
-        // Limpiamos el contenedor para redibujar o mostrar el GIF
-        contenedor.innerHTML = "";
-
+        let gif = null;
+        let texto = null;
         if (haGanado) {
             // --- LÓGICA DE VICTORIA ---
-            const victoryGif = document.createElement('img');
-            victoryGif.src = 'https://media.tenor.com/m6GXiMipKOgAAAAM/victory-yes.gif';
-            victoryGif.style.width = '100%'; // Para que se ajuste al contenedor
-            victoryGif.style.height = 'auto';
-            contenedor.appendChild(victoryGif);
+            gif = "https://media.tenor.com/m6GXiMipKOgAAAAM/victory-yes.gif";
+            texto = "Ganaste!";
+        } else if (haPerdido) {
+            // --- LÓGICA DE DERROTA ---
+            gif = "https://media.tenor.com/KxHvjKDoTkEAAAAM/brain-taking-out.gif";
+            texto = "Perdiste...";
+        }
+
+        if (gif) {
+            const mensaje = document.createElement("div");
+            mensaje.style["margin-top"] = "10px";
+            mensaje.style["color"] = "white";
+            mensaje.style["text-align"] = "center";
+            mensaje.style["white-space"] = "pre-line";
+            mensaje.textContent = texto;
+
+            const defeatGif = document.createElement("img");
+            defeatGif.src = gif;
+            defeatGif.style.width = "100%"; // Para que se ajuste al contenedor
+            defeatGif.style.height = "auto";
+            contenedor.appendChild(defeatGif);
+            contenedor.appendChild(mensaje);
+
             return; // Detenemos la función aquí
         }
 
-        if (haPerdido) {
-            // --- LÓGICA DE DERROTA ---
-            const defeatGif = document.createElement('img');
-            defeatGif.src = 'https://media.tenor.com/KxHvjKDoTkEAAAAM/brain-taking-out.gif';
-            defeatGif.style.width = '100%'; // Para que se ajuste al contenedor
-            defeatGif.style.height = 'auto';
-            contenedor.appendChild(defeatGif);
-            return; // Detenemos la función aquí
-        }
-        
         // --- Si el juego no ha terminado, se dibuja el tablero ---
         const darEstilo = (celda, estilo) => {
             const estilos = {
@@ -71,8 +77,8 @@ window.juegoAuxiliares = {
 
         const tableroDiv = document.createElement("div");
         tableroDiv.style.display = "grid";
-        tableroDiv.style.gridTemplateColumns = `repeat(${this.MAPA[0].length}, 30px)`;
-        tableroDiv.style.gridTemplateRows = `repeat(${this.MAPA.length}, 30px)`;
+        tableroDiv.style.gridTemplateColumns = `repeat(${this.MAPA[0].length}, 25px)`;
+        tableroDiv.style.gridTemplateRows = `repeat(${this.MAPA.length}, 25px)`;
 
         for (let y = 0; y < this.MAPA.length; y++) {
             for (let x = 0; x < this.MAPA[y].length; x++) {
