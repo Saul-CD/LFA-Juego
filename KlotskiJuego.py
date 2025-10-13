@@ -1,5 +1,4 @@
 from JuegoInterfaz import JuegoInterfaz
-from compilador import compilar_juego
 
 
 class Klotski(JuegoInterfaz):
@@ -34,9 +33,7 @@ class Klotski(JuegoInterfaz):
 
         return ret
 
-    def aplicar_entrada(
-        self, q: tuple[str, str, str, str, str], entrada: str
-    ) -> tuple[str, str, str, str, str]:
+    def aplicar_entrada(self, q: tuple[str, str, str, str, str], entrada: str) -> tuple[str, str, str, str, str]:
         # Buscar ambos cursores
         cursor1_x, cursor1_y = -1, -1
         for idx, row in enumerate(q):
@@ -140,4 +137,7 @@ class Klotski(JuegoInterfaz):
         return q[3][1] == "R" and q[3][2] == "R" and q[4][1] == "R" and q[4][2] == "R"
 
 
-compilar_juego(Klotski())
+if __name__ == "__main__":
+    from compilador import compilar_juego
+
+    compilar_juego(Klotski())
